@@ -10,7 +10,7 @@ To install the package, follow these steps:
    Run the following command to add the custom commands repository to your Composer configuration:
 
    ```
-   composer config repositories.laravel-custom-commands vcs https://github.com/Skiadra/make-service-repository.git
+   composer config repositories.make-service-repository vcs https://github.com/Skiadra/make-service-repository.git
    ```
 
 2. **Install**  
