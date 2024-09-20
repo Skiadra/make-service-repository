@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace Vendor\CustomCommands\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
@@ -19,9 +19,14 @@ class MakeServiceCommand extends Command
     {
         $name = $this->argument('name');
         $serviceName = Str::studly($name);
-        $interfaceName = "{$serviceName}Interface"; // Updated interface name format
-        $bindClass = $this->option('bind'); // Get the binding class from the option
-        $dir = $this->option('dir'); // Get the directory from the option
+        $interfaceName = "{$serviceName}Interface";
+        $dir = $this->option('dir');
+
+        // Get the binding class and prepend the default namespace if necessary
+        $bindClass = $this->option('bind');
+        if (!str_contains($bindClass, '\\')) {
+            $bindClass = "App\\Providers\\{$bindClass}";
+        }
 
         // Define the directory path under Services
         $serviceDir = $dir ? "Services/{$dir}" : "Services";
@@ -38,7 +43,7 @@ class MakeServiceCommand extends Command
         // Generate the interface file
         $this->createInterfaceFile($interfacePath, $interfaceName, $serviceDir);
         // Bind the service and interface in the specified provider
-        $this->bindInServiceProvider($serviceName, $interfaceName, $bindClass, $serviceDir); // Corrected line to pass $serviceDir
+        $this->bindInServiceProvider($serviceName, $interfaceName, $bindClass, $serviceDir);
 
         $this->info("Service and interface created successfully!");
     }

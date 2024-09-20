@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace Vendor\CustomCommands\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
@@ -19,9 +19,14 @@ class MakeRepositoryCommand extends Command
     {
         $name = $this->argument('name');
         $repositoryName = Str::studly($name);
-        $interfaceName = "{$repositoryName}Interface"; // Updated interface name format
-        $bindClass = $this->option('bind'); // Get the binding class from the option
-        $dir = $this->option('dir'); // Get the directory from the option
+        $interfaceName = "{$repositoryName}Interface";
+        $bindClass = $this->option('bind');
+        $dir = $this->option('dir');
+
+        // Prepend the default namespace if the bind class doesn't have one
+        if (!str_contains($bindClass, '\\')) {
+            $bindClass = "App\\Providers\\{$bindClass}";
+        }
 
         // Define the directory path under Repositories
         $repositoryDir = $dir ? "Repositories/{$dir}" : "Repositories";
