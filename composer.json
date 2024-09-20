@@ -1,5 +1,5 @@
 {
-    "name": "vendor/laravel-custom-commands",
+    "name": "skiadra/laravel-custom-commands",
     "description": "A package for custom Artisan commands.",
     "type": "library",
     "license": "MIT",
