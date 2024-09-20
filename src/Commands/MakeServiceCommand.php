@@ -93,8 +93,7 @@ EOL;
 
         // Check if the binding provider file exists
         if (!file_exists($bindClassPath)) {
-            $this->error("The binding class {$bindClass} does not exist.");
-            return;
+            $this->createBindingClassFile($bindClass);
         }
 
         // Get the content of the binding class
@@ -127,5 +126,42 @@ EOL;
             file_put_contents($bindClassPath, $content);
             $this->info("register() method not found; added with binding in {$bindClass}.");
         }
+    }
+
+    protected function createBindingClassFile($bindClass)
+    {
+        // Extract class name from bindClass
+        $className = class_basename($bindClass);
+        $stub = <<<EOL
+<?php
+
+namespace App\\Providers;
+
+use Illuminate\Support\ServiceProvider;
+
+class {$className} extends ServiceProvider 
+{
+    /**
+     * Register any application services.
+     */
+    public function register(): void
+    {
+        // Add your bindings here
+    }
+
+    /**
+     * Bootstrap any application services.
+     */
+    public function boot(): void
+    {
+        //
+    }
+}
+
+EOL;
+
+        // Write the new binding class to the file
+        file_put_contents(base_path(str_replace('\\', '/', $bindClass) . '.php'), $stub);
+        $this->info("Binding class {$bindClass} created successfully.");
     }
 }
